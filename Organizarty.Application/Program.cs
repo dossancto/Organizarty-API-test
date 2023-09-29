@@ -1,8 +1,7 @@
 using Organizarty.Infra.Extensions;
-using Organizarty.Domain.UseCases.Users;
-using Organizarty.Application.Services;
-using DotNetEnv;
+using Organizarty.Application.Extensions;
 
+using DotNetEnv;
 Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,9 +12,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddProviders();
+builder.Services.AddServices();
 
-builder.Services.AddScoped<ISignUseCase, SignService>();
+builder.Services.AddProviders();
 
 var app = builder.Build();
 
