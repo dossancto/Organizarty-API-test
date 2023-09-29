@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Organizarty.Domain.Entities;
+using Organizarty.Infra.Data.EntityConfigurations;
 
 namespace Organizarty.Infra.Data.Contexts;
 
 public class ApplicationDbContext : DbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options) { }
+    public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
     public DbSet<User> Users { get; set; } = default!;
     public DbSet<UserConfirmEmail> UserConfirmEmails { get; set; } = default!;
@@ -15,5 +15,7 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        // builder.ApplyConfiguration(new UserConfiguration());
+        // builder.ApplyConfiguration(new UserConfirmEmailConfiguration());
     }
 }
