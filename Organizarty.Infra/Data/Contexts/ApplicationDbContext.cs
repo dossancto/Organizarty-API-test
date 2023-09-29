@@ -15,7 +15,5 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-        // builder.ApplyConfiguration(new UserConfiguration());
-        // builder.ApplyConfiguration(new UserConfirmEmailConfiguration());
     }
 }
