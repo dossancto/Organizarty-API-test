@@ -12,9 +12,4 @@ public class WeatherForecastController : ControllerBase
     {
         _logger = logger;
     }
-
-    public IActionResult Get()
-    {
-        return Ok("Tudo bom");
-    }
 }

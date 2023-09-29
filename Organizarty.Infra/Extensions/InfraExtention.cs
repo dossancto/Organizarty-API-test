@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Organizarty.Infra.Data.Contexts;
-using DotNetEnv;
 
 namespace Organizarty.Infra.Extensions;
 
@@ -27,8 +26,6 @@ public static class InfraExtention
 
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        Env.Load();
-
         services.AddDbContext<ApplicationDbContext>(options =>
           options.UseMySql(GetConnectionString(configuration),
           new MySqlServerVersion(new Version(8, 0, 26)),
