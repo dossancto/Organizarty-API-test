@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Organizarty.Domain\Organizarty.Domain.csproj" />
     <ProjectReference Include="..\Organizarty.Infra\Organizarty.Infra.csproj" />
+    <ProjectReference Include="..\Organizarty.Adapters\Organizarty.Adapters.csproj" />
   </ItemGroup>
 
 </Project>
