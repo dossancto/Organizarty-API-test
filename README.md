@@ -5,6 +5,8 @@
 - Clone repo
     ```sh
     git clone https://github.com/lu-css/Organizarty-API.git && cd Organizarty-API
+    git submodule init
+    git submodule update
     ```
 
 - Start database on Docker
