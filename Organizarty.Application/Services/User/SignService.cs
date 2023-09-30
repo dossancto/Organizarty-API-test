@@ -9,20 +9,74 @@ namespace Organizarty.Application.Services;
 
 public class SignService : ISignUseCase
 {
+    private readonly TimeSpan TOKEN_MAX_AGE = TimeSpan.FromHours(24);
+
     private readonly ApplicationDbContext _context;
     private readonly ICryptographys _crypto;
     private readonly ITokenAdapter _token;
+    private readonly IEmailSenderAdapter _email;
 
-    public SignService(ApplicationDbContext context, ICryptographys crypto, ITokenAdapter token)
+    public SignService(ApplicationDbContext context, ICryptographys crypto, ITokenAdapter token, IEmailSenderAdapter email)
     {
         _context = context;
         _crypto = crypto;
         _token = token;
+        _email = email;
     }
 
-    public Task<User> ConfirmEmailCode(string userId, string emailCode)
+    public async Task<User> ConfirmEmailCode(string emailCode)
     {
-        throw new NotImplementedException();
+        var emailId = Guid.Parse(emailCode);
+        var emailconfirmation = await _context.UserConfirmEmails
+                                            .Include(x => x.User)
+                                            .FirstOrDefaultAsync();
+
+        if (emailconfirmation is null)
+        {
+            throw new Exception("Email code not founded");
+        }
+
+        if (DateTime.Now >= emailconfirmation.ValidFor)
+        {
+            throw new Exception("Email code expired");
+        }
+
+        var user = emailconfirmation.User;
+
+        if (user is null)
+        {
+            Console.WriteLine(emailconfirmation.UserId);
+            Console.WriteLine(emailconfirmation.User);
+            throw new Exception("Why is user null here?");
+        }
+
+        // Set EmailConfirmed as True
+        user.EmailConfirmed = true;
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+
+        // Deletes all email codes from user
+        var emailCodes = await _context.UserConfirmEmails.Where(ec => ec.User.Id == user.Id).ToListAsync();
+        _context.UserConfirmEmails.RemoveRange(emailCodes);
+        await _context.SaveChangesAsync();
+
+        return user;
+    }
+
+    public async Task SendEmailConfirmCode(Guid userId, string targetEmail)
+    {
+        var confirmCode = new UserConfirmEmail
+        {
+            UserId = userId,
+            ValidFor = DateTime.Now.Add(TOKEN_MAX_AGE)
+        };
+
+        var savedEmail = _context.UserConfirmEmails.Add(confirmCode);
+        await _context.SaveChangesAsync();
+
+        var emailCode = savedEmail.Entity.Id.ToString();
+
+        await _email.SendConfirmationCode(targetEmail, emailCode);
     }
 
     public async Task<(User User, string Token)> Login(string email, string password)
@@ -56,6 +110,7 @@ public class SignService : ISignUseCase
 
     public async Task<User> Register(string userName, string email, string password)
     {
+        // TODO: Add domain validations
         if (string.IsNullOrWhiteSpace(password))
         {
             // TODO: Change to some Domain Exception
@@ -72,8 +127,12 @@ public class SignService : ISignUseCase
             Salt = salt
         };
 
+
         var savedUser = _context.Users.Add(user);
         await _context.SaveChangesAsync();
+
+        await SendEmailConfirmCode(savedUser.Entity.Id, email);
+
         return savedUser.Entity;
     }
 }

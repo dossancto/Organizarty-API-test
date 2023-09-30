@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Organizarty.Application.Dtos.Requests;
-using Organizarty.Domain.Entities;
 using Organizarty.Domain.UseCases.Users;
 
 namespace Organizarty.Application.Controllers;
@@ -35,6 +34,14 @@ public class AccountController : ControllerBase
         };
 
         return Ok(data);
+    }
+
+    [HttpGet("ConfirmCode/{code:Guid}")]
+    public async Task<IActionResult> Login(Guid code)
+    {
+      await _sign.ConfirmEmailCode(code.ToString());
+
+        return Ok("Account verified");
     }
 
     [HttpPost("Register")]

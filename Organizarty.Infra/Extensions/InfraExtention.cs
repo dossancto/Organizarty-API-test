@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Organizarty.Adapters;
 using Organizarty.Infra.Data.Contexts;
 using Organizarty.Infra.Providers.Cryptography;
+using Organizarty.Infra.Providers.EmailSender;
+using Organizarty.Infra.Providers.EmailSender.Configuration;
 using Organizarty.Infra.Providers.Token;
 
 namespace Organizarty.Infra.Extensions;
@@ -37,10 +39,19 @@ public static class InfraExtention
         return services;
     }
 
+    public static IServiceCollection AddProvidersConfiguration(this IServiceCollection services)
+    {
+        services.AddSingleton<MailgunConfiguration>();
+
+        return services;
+    }
+
     public static IServiceCollection AddProviders(this IServiceCollection services)
     {
         services.AddScoped<ICryptographys, Pbkdf2>();
         services.AddScoped<ITokenAdapter, JWT>();
+
+        services.AddScoped<IEmailSenderAdapter, Mailgun>();
 
         return services;
     }
