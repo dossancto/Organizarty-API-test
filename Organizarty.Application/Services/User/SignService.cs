@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 using Organizarty.Adapters;
@@ -15,13 +16,15 @@ public class SignService : ISignUseCase
     private readonly ICryptographys _crypto;
     private readonly ITokenAdapter _token;
     private readonly IEmailSenderAdapter _email;
+    private readonly IValidator<User> _userValidator;
 
-    public SignService(ApplicationDbContext context, ICryptographys crypto, ITokenAdapter token, IEmailSenderAdapter email)
+    public SignService(ApplicationDbContext context, ICryptographys crypto, ITokenAdapter token, IEmailSenderAdapter email, IValidator<User> userValidator)
     {
         _context = context;
         _crypto = crypto;
         _token = token;
         _email = email;
+        _userValidator = userValidator;
     }
 
     public async Task<User> ConfirmEmailCode(string emailCode)
@@ -130,6 +133,12 @@ public class SignService : ISignUseCase
             Salt = salt
         };
 
+        var result = await _userValidator.ValidateAsync(user);
+
+        if (!result.IsValid)
+        {
+          throw new Exception(result.ToString());
+        }
 
         var savedUser = _context.Users.Add(user);
         await _context.SaveChangesAsync();

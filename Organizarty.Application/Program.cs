@@ -1,5 +1,8 @@
 using Organizarty.Infra.Extensions;
 using Organizarty.Application.Extensions;
+using FluentValidation;
+
+using Organizarty.Domain.Validators;
 
 using DotNetEnv;
 Env.Load();
@@ -17,6 +20,8 @@ builder.Services.AddServices();
 builder.Services
   .AddProvidersConfiguration()
   .AddProviders();
+
+builder.Services.AddValidatorsFromAssemblyContaining<UserValidator>();
 
 var app = builder.Build();
 
