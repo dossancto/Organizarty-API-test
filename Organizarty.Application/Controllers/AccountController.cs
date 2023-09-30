@@ -8,10 +8,10 @@ namespace Organizarty.Application.Controllers;
 [Route("[controller]")]
 public class AccountController : ControllerBase
 {
-    private readonly ILogger<WeatherForecastController> _logger;
+    private readonly ILogger<AccountController> _logger;
     private readonly ISignUseCase _sign;
 
-    public AccountController(ILogger<WeatherForecastController> logger, ISignUseCase sign)
+    public AccountController(ILogger<AccountController> logger, ISignUseCase sign)
     {
         _logger = logger;
         _sign = sign;
