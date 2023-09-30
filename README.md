@@ -1,5 +1,7 @@
 # Organizarty Web API
 
+> Base URL: `https://organizarty-api.onrender.com`
+
 ## Run
 
 - Clone repo
