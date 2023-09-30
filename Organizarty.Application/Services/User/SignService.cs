@@ -35,15 +35,21 @@ public class SignService : ISignUseCase
                                             .FirstOrDefaultAsync();
 
         if (emailconfirmation is null)
+        {
             throw new Exception("Email code not founded");
+        }
 
         if (DateTime.Now >= emailconfirmation.ValidFor)
+        {
             throw new Exception("Email code expired");
+        }
 
         var user = emailconfirmation.User;
 
         if (user is null)
+        {
             throw new Exception("Why is user null here?");
+        }
 
         user.EmailConfirmed = true;
         _context.Users.Update(user);
@@ -137,7 +143,7 @@ public class SignService : ISignUseCase
 
         if (!result.IsValid)
         {
-          throw new Exception(result.ToString());
+            throw new Exception(result.ToString());
         }
 
         var savedUser = _context.Users.Add(user);

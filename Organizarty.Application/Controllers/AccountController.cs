@@ -24,7 +24,7 @@ public class AccountController : ControllerBase
 
         var data = new
         {
-            token = token,
+            token,
             user = new
             {
                 id = user.Id,
