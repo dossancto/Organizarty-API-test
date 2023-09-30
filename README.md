@@ -21,7 +21,7 @@
 
 - Start server
     ```sh
-    dotnet run
+    dotnet run -p Organizarty.Application
     ```
 
 ## On Docker
