@@ -147,4 +147,14 @@ public class SignService : ISignUseCase
 
         return savedUser.Entity;
     }
+
+    public Task<ThirdParty> ThirdPartyRegister(string name, string description, string loginEmail, string password, string profissionalPhone, string contactEmail, string contactPhone, string cnpj, List<string> tags)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<(ThirdParty User, string Token)> ThirdPartyLogin(string loginEmail, string password)
+    {
+        throw new NotImplementedException();
+    }
 }
