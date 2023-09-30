@@ -53,11 +53,24 @@ public class SignService : ISignUseCase
         return user;
     }
 
-    public async Task SendEmailConfirmCode(Guid userId, string targetEmail)
+    public async Task SendEmailConfirmCode(string targetEmail)
     {
+        var user = await _context.Users
+          .Select(x => new User
+          {
+              Id = x.Id,
+              Email = x.Email
+          })
+          .FirstOrDefaultAsync(user => user.Email == targetEmail);
+
+        if (user is null)
+        {
+            throw new Exception("User not found");
+        }
+
         var confirmCode = new UserConfirmEmail
         {
-            UserId = userId,
+            UserId = user.Id,
             ValidFor = DateTime.Now.Add(TOKEN_MAX_AGE)
         };
 
@@ -121,7 +134,7 @@ public class SignService : ISignUseCase
         var savedUser = _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        await SendEmailConfirmCode(savedUser.Entity.Id, email);
+        await SendEmailConfirmCode(email);
 
         return savedUser.Entity;
     }
