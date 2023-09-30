@@ -26,36 +26,26 @@ public class SignService : ISignUseCase
 
     public async Task<User> ConfirmEmailCode(string emailCode)
     {
-        var emailId = Guid.Parse(emailCode);
         var emailconfirmation = await _context.UserConfirmEmails
                                             .Include(x => x.User)
+                                            .Where(x => x.Id.ToString() == emailCode)
                                             .FirstOrDefaultAsync();
 
         if (emailconfirmation is null)
-        {
             throw new Exception("Email code not founded");
-        }
 
         if (DateTime.Now >= emailconfirmation.ValidFor)
-        {
             throw new Exception("Email code expired");
-        }
 
         var user = emailconfirmation.User;
 
         if (user is null)
-        {
-            Console.WriteLine(emailconfirmation.UserId);
-            Console.WriteLine(emailconfirmation.User);
             throw new Exception("Why is user null here?");
-        }
 
-        // Set EmailConfirmed as True
         user.EmailConfirmed = true;
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
 
-        // Deletes all email codes from user
         var emailCodes = await _context.UserConfirmEmails.Where(ec => ec.User.Id == user.Id).ToListAsync();
         _context.UserConfirmEmails.RemoveRange(emailCodes);
         await _context.SaveChangesAsync();
