@@ -63,7 +63,7 @@ public class SignService : ISignUseCase
         return user;
     }
 
-    public async Task SendEmailConfirmCode(string targetEmail)
+    public async Task<string> SendEmailConfirmCode(string targetEmail)
     {
         var user = await _context.Users
           .Select(x => new User
@@ -90,6 +90,8 @@ public class SignService : ISignUseCase
         var emailCode = savedEmail.Entity.Id.ToString();
 
         await _email.SendConfirmationCode(targetEmail, emailCode);
+
+        return emailCode;
     }
 
     public async Task<(User User, string Token)> Login(string email, string password)
@@ -149,8 +151,6 @@ public class SignService : ISignUseCase
 
         var savedUser = _context.Users.Add(user);
         await _context.SaveChangesAsync();
-
-        await SendEmailConfirmCode(email);
 
         return savedUser.Entity;
     }

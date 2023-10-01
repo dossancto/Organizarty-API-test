@@ -5,5 +5,6 @@ global using Organizarty.Infra.Data.Contexts;
 
 global using Organizarty.Domain.Validators;
 global using Organizarty.Domain.Exceptions;
+global using Organizarty.Domain.Entities;
 
 global using Organizarty.Tests.src.Mock;

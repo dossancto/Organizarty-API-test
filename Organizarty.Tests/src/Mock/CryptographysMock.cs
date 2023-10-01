@@ -9,14 +9,15 @@ public class CryptographysMock : ICryptographys
         throw new NotImplementedException();
     }
 
-    public (string HashedPassword, string Password) Hash(string password, byte[] salt)
+    public (string HashedPassword, string Salt) Hash(string password, byte[] salt)
     {
         throw new NotImplementedException();
     }
 
-    public (string HashedPassword, string Password) HashPassword(string password)
-    => ("Some salt", password);
+    public (string HashedPassword, string Salt) HashPassword(string password)
+    => (password, "Some salt");
 
-    public bool VerifyPassword(string password, string storedHashedPassword, string storedSalt)
-      => password == storedHashedPassword;
+    public bool VerifyPassword(string password, string storedHashedPassword, string storedSalt){
+      return password == storedHashedPassword;
+    }
 }

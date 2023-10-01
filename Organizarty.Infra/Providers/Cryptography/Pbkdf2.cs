@@ -20,7 +20,7 @@ public class Pbkdf2 : ICryptographys
         }
     }
 
-    public (string HashedPassword, string Password) Hash(string password, byte[] salt)
+    public (string HashedPassword, string Salt) Hash(string password, byte[] salt)
     {
         using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, INTERATIONS, HashAlgorithmName.SHA256))
         {
@@ -29,7 +29,7 @@ public class Pbkdf2 : ICryptographys
         }
     }
 
-    public (string HashedPassword, string Password) HashPassword(string password)
+    public (string HashedPassword, string Salt) HashPassword(string password)
     {
         var salt = GenenateSalt();
         return Hash(password, salt);
