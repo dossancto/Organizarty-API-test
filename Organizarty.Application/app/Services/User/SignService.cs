@@ -7,7 +7,7 @@ using Organizarty.Domain.Exceptions;
 using Organizarty.Domain.UseCases.Users;
 using Organizarty.Infra.Data.Contexts;
 
-namespace Organizarty.Application.Services;
+namespace Organizarty.Application.app.Services;
 
 public class SignService : ISignUseCase
 {
@@ -106,16 +106,16 @@ public class SignService : ISignUseCase
             throw new NotFoundException($"User with email '{email}' not found. Consider Create a new Account.");
         }
 
-        if (!storedUser.EmailConfirmed)
-        {
-            throw new NotFoundException($"Pleace Confirm your email");
-        }
-
         bool isCredentialsValid = _crypto.VerifyPassword(password, storedUser.Password ?? "", storedUser.Salt ?? "");
 
         if (!isCredentialsValid)
         {
-            throw new NotFoundException("User with this email and password not found.");
+            throw new NotFoundException("Email or password is not valid.");
+        }
+
+        if (!storedUser.EmailConfirmed)
+        {
+            throw new NotFoundException($"Pleace Confirm your email");
         }
 
         var token = _token.GenerateToken(storedUser.Id.ToString(), email);

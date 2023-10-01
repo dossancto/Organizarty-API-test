@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using Organizarty.Application.Dtos.Requests;
 using Organizarty.Domain.UseCases.Users;
 
-namespace Organizarty.Application.Controllers;
+using Organizarty.Application.app.Dtos.Requests;
+
+namespace Organizarty.Application.app.Controllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -39,7 +40,7 @@ public class AccountController : ControllerBase
     [HttpGet("ConfirmCode/{code:Guid}")]
     public async Task<IActionResult> Login(Guid code)
     {
-      await _sign.ConfirmEmailCode(code.ToString());
+        await _sign.ConfirmEmailCode(code.ToString());
 
         return Ok("Account verified");
     }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Organizarty.Domain.Exceptions;
 
-namespace Organizarty.Application.Controllers;
+namespace Organizarty.Application.app.Controllers;
 
 [ApiController]
 public class ErrorController : ControllerBase

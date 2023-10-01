@@ -1,3 +1,3 @@
-namespace Organizarty.Application.Dtos.Requests;
+namespace Organizarty.Application.app.Dtos.Requests;
 
 public record LoginDTO(string Email, string Password) {}

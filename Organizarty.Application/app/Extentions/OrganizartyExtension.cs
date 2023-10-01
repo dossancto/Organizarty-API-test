@@ -1,7 +1,7 @@
 using Organizarty.Domain.UseCases.Users;
-using Organizarty.Application.Services;
+using Organizarty.Application.app.Services;
 
-namespace Organizarty.Application.Extensions;
+namespace Organizarty.Application.app.Extensions;
 
 public static class OrganizartyExtension
 {

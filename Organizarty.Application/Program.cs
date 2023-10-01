@@ -1,5 +1,5 @@
 using Organizarty.Infra.Extensions;
-using Organizarty.Application.Extensions;
+using Organizarty.Application.app.Extensions;
 using FluentValidation;
 
 using Organizarty.Domain.Validators;
