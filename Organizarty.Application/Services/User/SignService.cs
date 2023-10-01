@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Organizarty.Adapters;
 using Organizarty.Domain.Entities;
+using Organizarty.Domain.Exceptions;
 using Organizarty.Domain.UseCases.Users;
 using Organizarty.Infra.Data.Contexts;
 
@@ -95,24 +96,26 @@ public class SignService : ISignUseCase
     {
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
         {
-            // TODO: Change to some Domain Exception
-            throw new Exception("Pleace inform an Email and Password");
+            throw new ValidationFailException("Pleace inform an Email and Password");
         }
 
         var storedUser = await _context.Users.FirstOrDefaultAsync(user => user.Email == email);
 
         if (storedUser is null)
         {
-            // TODO: Change to some Domain Exception
-            throw new Exception($"User with email '{email}' not found. Consider Create a new Account.");
+            throw new NotFoundException($"User with email '{email}' not found. Consider Create a new Account.");
+        }
+
+        if (!storedUser.EmailConfirmed)
+        {
+            throw new NotFoundException($"Pleace Confirm your email");
         }
 
         bool isCredentialsValid = _crypto.VerifyPassword(password, storedUser.Password ?? "", storedUser.Salt ?? "");
 
         if (!isCredentialsValid)
         {
-            // TODO: Change to some Domain Exception
-            throw new Exception("Email or Password wrong");
+            throw new NotFoundException("User with this email and password not found.");
         }
 
         var token = _token.GenerateToken(storedUser.Id.ToString(), email);
@@ -122,11 +125,9 @@ public class SignService : ISignUseCase
 
     public async Task<User> Register(string userName, string email, string password)
     {
-        // TODO: Add domain validations
         if (string.IsNullOrWhiteSpace(password))
         {
-            // TODO: Change to some Domain Exception
-            throw new Exception("Password cant be blank");
+            throw new ValidationFailException("Password cant be blank");
         }
 
         (string hashedPassword, string salt) = _crypto.HashPassword(password);
@@ -143,7 +144,7 @@ public class SignService : ISignUseCase
 
         if (!result.IsValid)
         {
-            throw new Exception(result.ToString());
+            throw new ValidationFailException(result.ToString());
         }
 
         var savedUser = _context.Users.Add(user);
