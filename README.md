@@ -29,7 +29,11 @@
     ```
 
 ## On Docker
-- Run Docker file
+- Production: (You must set the environment variables)
+    ```sh
+    docker build -t organizarty_api_prod:latest .
+    docker run -d -p 8080:80 organizarty_api_prod:latest
+    ```
 
 ## Development
 
