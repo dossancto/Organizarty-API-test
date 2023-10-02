@@ -48,7 +48,7 @@ public class LoginTest : IDisposable
     [Fact]
     public async Task Login_EmailNotConfirmed_ReturnNotFoundException()
     {
-        var registeredUser = await setupUser();
+        await setupUser();
 
         await Assert.ThrowsAsync<NotFoundException>(async () =>
         {
@@ -59,7 +59,7 @@ public class LoginTest : IDisposable
     [Fact]
     public async Task Login_WrongPassword_ReturnNotFoundException()
     {
-        var registeredUser = await setupUser();
+        await setupUser();
 
         await Assert.ThrowsAsync<NotFoundException>(async () =>
         {
@@ -70,7 +70,7 @@ public class LoginTest : IDisposable
     [Fact]
     public async Task Login_EmailNotFound_ReturnNotFoundException()
     {
-        var registeredUser = await setupUser();
+        await setupUser();
 
         await Assert.ThrowsAsync<NotFoundException>(async () =>
         {

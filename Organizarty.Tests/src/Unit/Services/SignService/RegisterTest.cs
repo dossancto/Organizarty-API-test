@@ -34,7 +34,7 @@ public class RegisterTest : IDisposable
     {
         await Assert.ThrowsAsync<ValidationFailException>(async () =>
         {
-            var user = await _signService.Register("john", "valid@email.com", "secure_and_long_password");
+            await _signService.Register("john", "valid@email.com", "secure_and_long_password");
         });
     }
 
@@ -43,7 +43,7 @@ public class RegisterTest : IDisposable
     {
         await Assert.ThrowsAsync<ValidationFailException>(async () =>
         {
-            var user = await _signService.Register("john123", "invalid_email.com", "secure_and_long_password");
+            await _signService.Register("john123", "invalid_email.com", "secure_and_long_password");
         });
     }
 }
