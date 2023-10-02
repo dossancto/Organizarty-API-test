@@ -34,6 +34,12 @@ public class ErrorController : ControllerBase
 
         if (error is ValidationFailException)
         {
+            var ex = (ExpiredDataException)error;
+            return StatusCode(498, ex.Message);
+        }
+
+        if (error is ValidationFailException)
+        {
             var ex = (ValidationFailException)error;
             return StatusCode(400, ex.Message);
         }

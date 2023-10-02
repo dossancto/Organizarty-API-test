@@ -37,19 +37,19 @@ public class SignService : ISignUseCase
 
         if (emailconfirmation is null)
         {
-            throw new Exception("Email code not founded");
+            throw new NotFoundException("Email code not founded");
         }
 
         if (DateTime.Now >= emailconfirmation.ValidFor)
         {
-            throw new Exception("Email code expired");
+            throw new ExpiredDataException("Email code expired");
         }
 
         var user = emailconfirmation.User;
 
         if (user is null)
         {
-            throw new Exception("Why is user null here?");
+            throw new NotFoundException("User from email code not found.");
         }
 
         user.EmailConfirmed = true;
@@ -75,7 +75,7 @@ public class SignService : ISignUseCase
 
         if (user is null)
         {
-            throw new Exception("User not found");
+            throw new NotFoundException("User not found");
         }
 
         var confirmCode = new UserConfirmEmail
