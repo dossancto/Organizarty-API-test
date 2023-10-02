@@ -1,5 +1,7 @@
 # Organizarty Web API
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/65c999e56e1246df9c5bae56f4206ebe)](https://app.codacy.com/gh/Star-End-Systems/Organizarty-API/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
 > Base URL: `https://organizarty-api.onrender.com`
 
 ## Run
